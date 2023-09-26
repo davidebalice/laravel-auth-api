@@ -17,6 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('category_id')->nullable();
             $table->string('name')->nullable();
+            $table->string('photo')->nullable();
+            $table->double('price')->nullable();
             $table->string('code')->nullable();
             $table->string('description')->nullable();
             $table->timestamps();

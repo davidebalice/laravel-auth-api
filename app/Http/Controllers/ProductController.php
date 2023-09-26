@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ProductController extends Controller
 {
     public function Index(){
-        $product = Product::latest()->get();
+        $product = Product::latest()->select('id', 'name', 'price', 'photo')->get();
         return response()->json($product);
     }
 
@@ -35,6 +36,15 @@ class ProductController extends Controller
     public function Edit($id){
         $product = Product::findOrFail($id);
         return response()->json($product);
+    }
+
+    public function Show($id) {
+        try {
+            $product = Product::findOrFail($id);
+            return response()->json($product);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Product not found:' . $e], 404);
+        }
     }
 
     public function Update(Request $request, $id){
