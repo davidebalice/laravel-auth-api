@@ -7,6 +7,9 @@ use App\Http\Controllers\ForgetController;
 use App\Http\Controllers\ResetController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductController;
+use GraphQL\Type\Definition\Type;
+use Rebing\GraphQL\Support\Facades\GraphQL;
+use Rebing\GraphQL\Support\Type as GraphQLType;
 
 Route::post('/login',[AuthController::class, 'Login']);
 Route::post('/register',[AuthController::class, 'Register']);
@@ -22,3 +25,11 @@ Route::controller(ProductController::class)->group(function(){
    // Route::post('/products/update/{id}', 'Update')->name('products.update')->middleware('auth:api'); 
    // Route::get('/products/delete/{id}', 'Delete')->name('products.delete')->middleware('auth:api'); 
 });
+
+Route::group(['prefix' => 'graphql'], function () {
+    Route::post('/products', 'GraphQLController@query');
+    Route::get('/products', 'GraphQLController@graphiql')->name('graphql.graphiql');
+});
+
+
+
