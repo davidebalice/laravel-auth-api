@@ -15,18 +15,15 @@ class AuthController extends Controller
     public function Login(Request $request){
 
     	try{
-    		if (Auth::attempt($request->only('email','password'))) {
+    		if (Auth::attempt($request->only('username','password'))) {
     			$user = Auth::user();
     			$token = $user->createToken('app')->accessToken;
-				// generate Randome Token 
-				//$token = rand(10,100000);
-				//dd($token);
 
     			return response([
-    				'message' => "Successfully Login",
+    				'message' => "Successfully login",
     				'token' => $token,
-    				'user' => $user
-    			],200); // States Code
+    				'server' => 'laravel'
+    			],200);
     		}
 
     	}catch(Exception $exception){
@@ -35,7 +32,7 @@ class AuthController extends Controller
     		],400);
     	}
     	return response([
-    		'message' => 'Invalid Email Or Password' 
+    		'message' => 'Invalid Username Or Password' 
     	],401);
 
     }
