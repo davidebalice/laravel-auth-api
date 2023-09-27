@@ -42,10 +42,10 @@ class ProductQuery extends Query
         $with = $fields->getRelations();
 
         $productId = $args['id'];
-
         $product = Product::where('id', $productId)->get();
+
         if (!$product) {
-            throw new \Exception("Prodotto non trovato");
+            throw new \Exception("Product not found");
         }
         return $product;
     }

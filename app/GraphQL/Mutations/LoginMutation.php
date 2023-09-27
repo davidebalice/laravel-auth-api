@@ -3,13 +3,13 @@
 declare(strict_types=1);
 
 namespace App\GraphQL\Mutations;
-
+use Illuminate\Support\Facades\Auth;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Mutation;
 use Rebing\GraphQL\Support\SelectFields;
 use App\Models\User;
-
+use Exception;
 class LoginMutation extends Mutation
 {
     protected $attributes = [
@@ -19,7 +19,7 @@ class LoginMutation extends Mutation
 
     public function type(): Type
     {
-        return Type::string(); // Puoi restituire il tipo che desideri per il risultato del login
+        return Type::string();
     }
 
     public function args(): array
@@ -48,12 +48,30 @@ class LoginMutation extends Mutation
         ];
 
         if (auth()->attempt($credentials)) {
-            // L'utente è stato autenticato con successo
-            // Puoi generare e restituire un token di autenticazione qui se necessario
-            return 'Login riuscito!';
+            
+            try{
+                if (Auth::attempt($credentials)) {
+                    $user = Auth::user();
+                    $token = $user->createToken('app')->accessToken;
+
+                    return response([
+                        'message' => "Successfully login",
+                        'token' => $token,
+                        'server' => 'laravel'
+                    ],200);
+                }
+
+            }catch(Exception $exception){
+                return response([
+                    'message' => $exception->getMessage()
+                ],400);
+            }
+            return response([
+                'message' => 'Invalid Username or Password'
+            ],401);
+           
         } else {
-            // L'utente non è stato autenticato
-            return 'Credenziali non valide';
+            return 'Invalid Username or Password';
         }
     }
 }

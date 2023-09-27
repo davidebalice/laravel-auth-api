@@ -40,38 +40,7 @@ return [
     //
     // You can also provide a middleware that will only apply to the given schema
     //
-    // Example:
-    //
-    //  'schemas' => [
-    //      'default' => [
-    //          'controller' => MyController::class . '@method',
-    //          'query' => [
-    //              App\GraphQL\Queries\UsersQuery::class,
-    //          ],
-    //          'mutation' => [
-    //
-    //          ]
-    //      ],
-    //      'user' => [
-    //          'query' => [
-    //              App\GraphQL\Queries\ProfileQuery::class,
-    //          ],
-    //          'mutation' => [
-    //
-    //          ],
-    //          'middleware' => ['auth'],
-    //      ],
-    //      'user/me' => [
-    //          'query' => [
-    //              App\GraphQL\Queries\MyProfileQuery::class,
-    //          ],
-    //          'mutation' => [
-    //
-    //          ],
-    //          'middleware' => ['auth'],
-    //      ],
-    //  ]
-    //
+   /*
     'schemas' => [
         'default' => [
             'query' => [
@@ -87,7 +56,7 @@ return [
             ],
 
             // Laravel HTTP middleware
-            'middleware' => null,
+           'middleware' => ['auth:api'], 
 
             // Which HTTP methods to support; must be given in UPPERCASE!
             'method' => ['GET', 'POST'],
@@ -96,6 +65,33 @@ return [
             'execution_middleware' => null,
         ],
     ],
+
+*/
+
+    'schemas' => [
+        'default' => [
+            'query' => [
+                'products' => \App\GraphQL\Queries\ProductsQuery::class,
+                'product' => \App\GraphQL\Queries\ProductQuery::class,       
+            ],
+            'mutation' => [
+            ],
+            'middleware' => ['auth:api'],
+            'method' => ['GET', 'POST'],
+            'execution_middleware' => null,
+        ],
+        'public' => [
+            'query' => [
+            ],
+            'mutation' => [
+                'login' => \App\GraphQL\Mutations\LoginMutation::class,
+            ],
+            'middleware' => null,
+            'method' => ['POST'],
+        ],
+    ],
+
+
 
     // The global types available to all schemas.
     // You can then access it from the facade like this: GraphQL::type('user')

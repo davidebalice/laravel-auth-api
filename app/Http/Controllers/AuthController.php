@@ -34,7 +34,6 @@ class AuthController extends Controller
     	return response([
     		'message' => 'Invalid Username Or Password' 
     	],401);
-
     }
 
 	public function Register(RegisterRequest $request){
